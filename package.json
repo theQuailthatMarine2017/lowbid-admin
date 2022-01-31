@@ -1,0 +1,29 @@
+{
+  "name": "admin-lowbid",
+  "version": "1.0.0",
+  "description": "",
+  "main": "admin.js",
+  "dependencies": {
+    "africastalking": "^0.5.4",
+    "axios": "^0.24.0",
+    "bcrypt": "^5.0.1",
+    "body-parser": "^1.19.0",
+    "class-validator": "^0.13.2",
+    "cors": "^2.8.5",
+    "dateformat": "^5.0.2",
+    "dotenv": "^10.0.0",
+    "express": "^4.17.1",
+    "mpesa-api": "^3.0.2",
+    "mysql2": "^2.3.3",
+    "uuid": "^8.3.2"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.15"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon index.js"
+  },
+  "author": "",
+  "license": "ISC"
+}
