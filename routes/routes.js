@@ -423,8 +423,8 @@ module.exports = function(app){
 
             connection.connect();
 
-            connection.query('UPDATE PRODUCTS SET PHOTO = ?, NAME = ?, DESCRIPTION = ?, LOWEST_BID = ?, COST = ?, END_DATE = ? WHERE id = ?',
-            [req.body.PHOTO,req.body.NAME,req.body.DESCRIPTION,req.body.LOWEST_BID,req.body.COST,req.body.END_DATE,req.body.id], function (error) {
+            connection.query('UPDATE PRODUCTS SET PHOTO = ?, CATEGORY = ?, NAME = ?, DESCRIPTION = ?, LOWEST_BID = ?, COST = ?, END_DATE = ? WHERE id = ?',
+            [req.body.PHOTO,req.body.CATEGORY, req.body.NAME,req.body.DESCRIPTION,req.body.LOWEST_BID,req.body.COST,req.body.END_DATE,req.body.id], function (error) {
                 if (error){
                     //LOG ERROR 
                 const log_ = new log(sys_actions.products.updated,sys_actions.outcome.failed, error, req.headers["x-real-ip"],req.headers['user-agent']);
