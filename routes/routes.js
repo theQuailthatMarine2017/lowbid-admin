@@ -5,8 +5,8 @@ const saltRounds = 1;
 require('dotenv').config();
 
 var connection = mysql.createConnection({
-    user     : 'rony',
-    password : 'password',
+    user     : 'lowbid',
+    password : 'Jesuspeace93!',
     database : 'lowbid'
   });
 
