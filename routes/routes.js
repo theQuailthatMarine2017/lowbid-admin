@@ -83,6 +83,57 @@ module.exports = function(app){
 
     });
 
+    app.get('/app/products', (req, res) => {
+
+        res.header("Access-Control-Allow-Origin", "https://lowbids.co.ke");
+        res.header("Access-Control-Allow-Methods", "GET,HEAD,OPTIONS,POST,PUT");
+        res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type,Accept, x-client-key, x-client-token, x-client-secret, Authorization");
+
+        connection.connect();
+        //Express Validator
+
+        if(req.headers['auth'] === process.env.AUTH_CODE){
+
+            // Save Account To Database
+
+            connection.query('SELECT * FROM PRODUCTS WHERE END_DATE > ? ORDER BY TOTAL_BIDS DESC',[new Date(Date.now())], function (error, products) {
+                if(products === null){
+
+                    res.json({message:"No Products Found"});
+
+                }
+                if (error){
+
+                    //LOG ERROR 
+                const log_ = new log(sys_actions.products.get,sys_actions.outcome.failed, error, req.headers["x-real-ip"],req.headers['user-agent']);
+                connection.query('INSERT INTO SYS_LOGS SET ?', [log_], function (error) {
+                    if (error){
+                        res.json({message:"Server Error"});
+                    }
+                });
+
+                }else{
+                    // Neat!
+                    // log action
+                    const log_ = new log(sys_actions.products.get,sys_actions.outcome.success,null,req.headers["x-real-ip"],req.headers['user-agent']);
+
+                    connection.query('INSERT INTO SYS_LOGS SET ?', [log_], function (error, results) {
+                        if (error){
+                            console.log(error);
+                        }else{
+                            // Neat!
+                            
+                            res.json({products:products});
+                        }
+                      });
+                }
+              });
+        }else{
+            res.json({message:"Server Error"});
+        }
+    
+    });
+
     app.post('/access_accounts/create', (req, res) => {
 
         connection.connect();
