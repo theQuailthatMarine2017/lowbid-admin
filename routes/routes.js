@@ -79,7 +79,8 @@ module.exports = function(app){
 
     app.get('/hello',(req,res) => {
 
-        res.send(req);
+
+        res.send("You Can Connect Homie!");
 
     });
 
@@ -412,7 +413,7 @@ module.exports = function(app){
                 }
               });
         }else{
-            res.json({message:"Server Error"});
+            res.status(403).render();
         }
     
     });
@@ -452,7 +453,7 @@ module.exports = function(app){
               });
 
         }else{
-            res.json({message:"Server Error"});
+            res.status(403).render();
         }
     
     });
