@@ -108,7 +108,7 @@ module.exports = function(app){
                 const log_ = new log(sys_actions.products.get,sys_actions.outcome.failed, error, req.headers["x-real-ip"],req.headers['user-agent']);
                 connection.query('INSERT INTO SYS_LOGS SET ?', [log_], function (error) {
                     if (error){
-                        res.json({message:"Server Error"});
+                        res.json({message:error});
                     }
                 });
 
@@ -390,7 +390,7 @@ module.exports = function(app){
                 const log_ = new log(sys_actions.products.get,sys_actions.outcome.failed, error, req.headers["x-real-ip"],req.headers['user-agent']);
                 connection.query('INSERT INTO SYS_LOGS SET ?', [log_], function (error) {
                     if (error){
-                        res.json({message:"Server Error"});
+                        res.json({message:error});
                     }
                 });
 
