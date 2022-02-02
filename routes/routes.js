@@ -80,7 +80,7 @@ module.exports = function(app){
     app.get('/hello',(req,res) => {
 
 
-        res.send("You Can Connect Homie!");
+        res.send(process.env.AUTH_CODE);
 
     });
 
