@@ -519,7 +519,7 @@ module.exports = function(app){
         if(req != null){
             // Save Account To Database
 
-            connection.query('SELECT * FROM BIDS ORDER BY BID_DIF ASC', function (error, bids) {
+            connection.query('SELECT * FROM BIDS', function (error, bids) {
                 if(bids === null){
 
                     res.json({message:"No bids Found"});
