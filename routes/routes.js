@@ -86,11 +86,7 @@ module.exports = function(app){
     });
 
     app.get('/app/products', (req, res) => {
-        const allowedOrigins = ["https://lowbids.co.ke","https://api-winners.lowbids.co.ke/"]
-        const origin = req.headers.origin;
-        if (allowedOrigins.includes(origin)) {
-            res.setHeader('Access-Control-Allow-Origin', origin);
-        }
+
         res.header("Access-Control-Allow-Origin", "https://lowbids.co.ke");
         res.header("Access-Control-Allow-Methods", "GET");
         res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type,Accept, x-client-key, x-client-token, x-client-secret, Authorization");
