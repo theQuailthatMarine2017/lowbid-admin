@@ -22,7 +22,7 @@ if (cluster.isMaster) {
     const app = express();
     const port = 4000;
 
-    var origins = ['*','https://lowbids.co.ke','lowbids.co.ke','https://dashboard.lowbids.co.ke','dashboard.lowbids.co.ke','http://localhost:8081'];
+    var origins = ['*','https://lowbids.co.ke','lowbids.co.ke','https://dashboard.lowbids.co.ke','dashboard.lowbids.co.ke','http://localhost:8081','https://winportal.lowbids.co.ke','winportal.lowbids.co.ke'];
 
     app.use(cors({
       origin: origins
