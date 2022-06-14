@@ -93,7 +93,7 @@ module.exports = function(app){
 
         connection.connect();
         //Express Validator
-
+        console.log(process.env.AUTH_CODE);
         if(req.headers['auth'] === process.env.AUTH_CODE){
 
             // Save Account To Database
