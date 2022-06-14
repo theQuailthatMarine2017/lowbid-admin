@@ -1,14 +1,15 @@
 var mysql = require('mysql2');
 const bcrypt = require('bcrypt');
 const saltRounds = 1;
+var jwt = require('jsonwebtoken');
 
 require('dotenv').config();
 
 var connection = mysql.createConnection({
     user     : 'lowbid',
     password : 'Jesuspeace93!',
-    database : 'lowbid'
-  });
+    database: 'lowbid'
+});
 
 const sys_actions = {
     login:'access_account_login',
@@ -85,7 +86,11 @@ module.exports = function(app){
     });
 
     app.get('/app/products', (req, res) => {
-
+        const allowedOrigins = ["https://lowbids.co.ke","https://api-winners.lowbids.co.ke/"]
+        const origin = req.headers.origin;
+        if (allowedOrigins.includes(origin)) {
+            res.setHeader('Access-Control-Allow-Origin', origin);
+        }
         res.header("Access-Control-Allow-Origin", "https://lowbids.co.ke");
         res.header("Access-Control-Allow-Methods", "GET");
         res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type,Accept, x-client-key, x-client-token, x-client-secret, Authorization");
@@ -253,7 +258,7 @@ module.exports = function(app){
 
         if(req.headers['auth'] === process.env.AUTH_CODE){
             connection.connect();
-
+            console.log(req.body.code)
             let login_user = {
                 code:req.body.code,
                 pass:req.body.pass
@@ -264,7 +269,7 @@ module.exports = function(app){
             if(login_user.code != null){
                 // Save Account To Database
                 console.log("checking database....");
-                connection.query('SELECT * FROM ACCESS_ACCOUNT WHERE access_code = ? LIMIT 1', [login_user.code], function (error, results) {
+                connection.query('SELECT * FROM ACCESS_ACCOUNT WHERE access_code = ?', [req.body.code], function (error, results) {
                     
                     if (error != null){
                         console.log(error);
@@ -283,23 +288,13 @@ module.exports = function(app){
                                 //BCRYPT COMPARE PASSWORD
                                 const pass_ = bcrypt.compareSync(login_user.pass, account.pass_code);
                                 console.log(pass_);
-                                if(pass_){
+                                if (pass_) {
 
-                                    //Log Activity Into Database
-                                    const log_ = new log(sys_actions.login,sys_actions.outcome.success,null,req.headers["x-real-ip"],req.headers['user-agent']);
-
-                                    connection.query('INSERT INTO SYS_LOGS SET ?', [log_], function (error, results) {
-                                        if (error){
-                                
-                                            console.log(error);
-                                        }else{
-                                            // Neat!
-                                            console.log(results);
-                                            res.json({message:"Successful Login",account});
-                                        }
-                                    });
+                                    var token = jwt.sign(account, 'lowidtoken');
+                                    res.json({message:"Successful Login",token});
+                                   
                                 }else{
-                                    res.json({message:"Login Failed"})
+                                    res.status(403).json({message:"Login Failed. Incorrect code or pass."})
                                 }
                             });
                         }else{
@@ -372,50 +367,22 @@ module.exports = function(app){
 
     app.get('/products', (req, res) => {
 
+        console.log(req.headers['auth'])
         connection.connect();
         //Express Validator
-
-        if(req.headers['auth'] === process.env.AUTH_CODE){
-
             // Save Account To Database
 
             connection.query('SELECT * FROM PRODUCTS ORDER BY END_DATE ASC', function (error, products) {
                 if(products === null){
-
                     res.json({message:"No Products Found"});
-
                 }
-                if (error){
-
-                    //LOG ERROR 
-                const log_ = new log(sys_actions.products.get,sys_actions.outcome.failed, error, req.headers["x-real-ip"],req.headers['user-agent']);
-                connection.query('INSERT INTO SYS_LOGS SET ?', [log_], function (error) {
-                    if (error){
-                        res.json({message:error});
-                    }
-                });
-
-                }else{
-                    // Neat!
-                    console.log(products);
-                    // log action
-                    const log_ = new log(sys_actions.products.get,sys_actions.outcome.success,null,req.headers["x-real-ip"],req.headers['user-agent']);
-
-                    connection.query('INSERT INTO SYS_LOGS SET ?', [log_], function (error, results) {
-                        if (error){
-                            console.log(error);
-                        }else{
-                            // Neat!
-                            console.log(results);
-                            res.json({products:products});
-                        }
-                      });
+                if (error) {
+                    res.json({message:error});
+                } else {
+                    console.log(products)
+                    res.json({products:products});
                 }
               });
-        }else{
-            res.status(403).render();
-        }
-    
     });
 
     app.post('/update/products', (req, res) => {

@@ -13,6 +13,7 @@
     "dateformat": "^5.0.2",
     "dotenv": "^10.0.0",
     "express": "^4.17.1",
+    "jsonwebtoken": "^8.5.1",
     "mpesa-api": "^3.0.2",
     "mysql2": "^2.3.3",
     "uuid": "^8.3.2"
