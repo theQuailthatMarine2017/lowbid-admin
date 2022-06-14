@@ -365,7 +365,7 @@ module.exports = function(app){
         //Express Validator
             // Save Account To Database
 
-            connection.query('SELECT * FROM PRODUCTS ORDER BY END_DATE ASC', function (error, products) {
+            connection.query('SELECT * FROM PRODUCTS WHERE END_DATE > ? ORDER BY TOTAL_BIDS DESC',[new Date(Date.now())], function (error, products) {
                 if(products === null){
                     res.json({message:"No Products Found"});
                 }
