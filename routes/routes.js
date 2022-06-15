@@ -479,7 +479,7 @@ module.exports = function(app){
         if(req != null){
             // Save Account To Database
 
-            var newAPIDATE= new Date(2022,5,15);
+            var newAPIDATE= new Date(2022,5,14);
             connection.query('SELECT * FROM BIDS WHERE PAID = 1 AND DATE > ?',[newAPIDATE], function (error, bids) {
                 if(bids === null){
                     res.json({message:"No bids Found"});
