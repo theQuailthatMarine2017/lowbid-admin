@@ -479,14 +479,11 @@ module.exports = function(app){
         if(req != null){
             // Save Account To Database
 
-            connection.query('SELECT * FROM BIDS', function (error, bids) {
+            connection.query('SELECT * FROM BIDS WHERE PAID = 1', function (error, bids) {
                 if(bids === null){
-
                     res.json({message:"No bids Found"});
-
                 }
                 if (error){
-
                     //LOG ERROR 
                 const log_ = new log(sys_actions.bids.get,sys_actions.outcome.failed, error, req.headers["x-real-ip"],req.headers['user-agent']);
                 connection.query('INSERT INTO SYS_LOGS SET ?', [log_], function (error) {
